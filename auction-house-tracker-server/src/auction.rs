@@ -1,17 +1,14 @@
 use reqwest;
-use item;
 use serde_json;
 use std::fs::File;
 use std::io::Read;
 
-use chrono::NaiveDateTime;
-use models::auction::{NewAuction, Auction};
-use diesel::{self, RunQueryDsl, PgConnection};
-use diesel::prelude::*;
+use crate::models::auction::{Auction, NewAuction};
+use diesel::{self, PgConnection, RunQueryDsl};
 
 impl Auction {
     pub fn insert(&self, conn: &PgConnection) {
-        use schema::auction;
+        use crate::schema::auction;
 
         let new_auction = NewAuction::from(self);
 
@@ -19,7 +16,7 @@ impl Auction {
             .values(&new_auction)
             .execute(conn)
         {
-            Ok(_) => {},
+            Ok(_) => {}
             Err(_) => {}
         }
     }
@@ -31,14 +28,12 @@ pub fn insert_auctions(conn: &PgConnection, auctions: &Vec<Auction>) {
     }
 }
 
+use diesel::QueryDsl;
 pub fn get_aucs_from_db(conn: &PgConnection) -> Vec<i32> {
-    use schema::auction::dsl::*;
+    use crate::schema::auction::dsl::*;
 
-    auction.select(auc)
-        .load(conn)
-        .expect("error loading ids")
+    auction.select(auc).load(conn).expect("error loading ids")
 }
-
 
 pub fn get_missing_auctions(conn: &PgConnection, auctions: &Vec<Auction>) -> Vec<Auction> {
     let mut missing_auctions = Vec::new();
@@ -89,6 +84,6 @@ pub fn get_auction_data_url(key: &str, realm: &str) -> (String, i64) {
     let v: serde_json::Value = serde_json::from_str(&data).unwrap();
     (
         v["files"][0]["url"].as_str().unwrap().into(),
-        v["files"][0]["lastModified"].as_i64().unwrap()
+        v["files"][0]["lastModified"].as_i64().unwrap(),
     )
 }

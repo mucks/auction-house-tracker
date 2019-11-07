@@ -1,19 +1,18 @@
-use schema::auction;
+use crate::schema::auction;
 use chrono::NaiveDateTime;
 
 #[derive(Serialize, Deserialize, Clone)]
 pub struct BonusList {
     #[serde(rename = "bonusListId")]
-    pub bonus_list_id: i32
+    pub bonus_list_id: i32,
 }
 
 #[derive(Serialize, Deserialize, Clone)]
 pub struct Modifier {
     #[serde(rename = "type")]
     modifier_type: i16,
-    value: i32
+    value: i32,
 }
-
 
 #[derive(Serialize, Deserialize, Clone)]
 pub struct Auction {
@@ -42,9 +41,8 @@ pub struct Auction {
     #[serde(rename = "petQualityId")]
     pub pet_quality_id: Option<i16>,
     #[serde(skip_deserializing)]
-    pub time: i64
+    pub time: i64,
 }
-
 
 #[derive(Queryable, Insertable)]
 #[table_name = "auction"]
@@ -64,7 +62,7 @@ pub struct NewAuction {
     pub pet_breed_id: Option<i16>,
     pub pet_level: Option<i16>,
     pub pet_quality_id: Option<i16>,
-    pub time: NaiveDateTime
+    pub time: NaiveDateTime,
 }
 
 impl NewAuction {
@@ -85,8 +83,7 @@ impl NewAuction {
             pet_breed_id: auction.pet_breed_id,
             pet_level: auction.pet_level,
             pet_quality_id: auction.pet_quality_id,
-            time: NaiveDateTime::from_timestamp(auction.time, 0)
+            time: NaiveDateTime::from_timestamp(auction.time, 0),
         }
     }
-
 }

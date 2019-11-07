@@ -1,9 +1,9 @@
-use schema::item;
+use crate::schema::item;
 
 #[derive(Serialize, Deserialize)]
 pub struct Stat {
     pub stat: i16,
-    pub amount: i32
+    pub amount: i32,
 }
 
 #[derive(Serialize, Deserialize)]
@@ -23,13 +23,13 @@ pub struct Spell {
     pub icon: String,
     pub description: String,
     pub cooldown: Option<String>,
-    pub castTime: Option<String>
+    pub castTime: Option<String>,
 }
 
 #[derive(Serialize, Deserialize)]
 pub struct WeaponInfo {
     pub weaponSpeed: f32,
-    pub dps: f32
+    pub dps: f32,
 }
 
 #[derive(Serialize, Deserialize)]
@@ -37,19 +37,19 @@ pub struct Damage {
     pub min: i32,
     pub max: i32,
     pub exactMin: f32,
-    pub exactMax: f32
+    pub exactMax: f32,
 }
 
 #[derive(Serialize, Deserialize)]
 pub struct SocketInfo {
     #[serde(rename = "type")]
-    pub socket_type: Option<String>
+    pub socket_type: Option<String>,
 }
 
 #[derive(Serialize, Deserialize)]
 pub struct ItemSource {
     pub sourceId: i32,
-    pub sourceType: String
+    pub sourceType: String,
 }
 
 #[derive(Serialize, Deserialize)]
@@ -117,11 +117,11 @@ pub struct Item {
     #[serde(rename = "availableContexts")]
     pub available_contexts: Vec<String>,
     #[serde(rename = "artifactId")]
-    pub artifact_id: i16
+    pub artifact_id: i16,
 }
 
 #[derive(Queryable, Insertable)]
-#[table_name="item"]
+#[table_name = "item"]
 pub struct NewItem {
     pub id: i32,
     pub description: String,
@@ -153,16 +153,19 @@ pub struct NewItem {
     pub upgradable: bool,
     pub heroic_tooltip: bool,
     pub context: String,
-    pub artifact_id: i16
+    pub artifact_id: i16,
 }
 
 impl NewItem {
     pub fn from(item: &Item) -> NewItem {
-        NewItem {    
+        NewItem {
             id: item.id,
             description: item.description.to_owned(),
             name: item.name.to_owned(),
-            icon: item.icon.to_owned().unwrap_or("inv_misc_questionmark".into()),
+            icon: item
+                .icon
+                .to_owned()
+                .unwrap_or("inv_misc_questionmark".into()),
             stackable: item.stackable,
             item_bind: item.item_bind,
             buy_price: item.buy_price,
@@ -189,9 +192,7 @@ impl NewItem {
             upgradable: item.upgradable,
             heroic_tooltip: item.heroic_tooltip,
             context: item.context.to_owned(),
-            artifact_id: item.artifact_id
+            artifact_id: item.artifact_id,
         }
-
     }
-
 }
